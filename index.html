@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单据申请系统</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>单据申请</h1>
+            <button class="btn-close" onclick="submitForm()">提交</button>
+        </header>
+        
+        <div class="form-container">
+            <form id="requisitionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="applicant">申请人：</label>
+                        <input type="text" id="applicant" name="applicant" value="user01" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="applyDate">申请日期：</label>
+                        <div class="date-picker-container">
+                            <input type="date" id="applyDate" name="applyDate" value="2023-02-27">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="applyNumber">申请单编号：</label>
+                        <input type="text" id="applyNumber" name="applyNumber" value="CG20230227000008" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="department">申请部门：</label>
+                        <div class="select-container">
+                            <select id="department" name="department">
+                                <option value="">请选择部门</option>
+                                <option value="1" selected>综合管理部</option>
+                                <option value="2">财务部</option>
+                                <option value="3">人力资源部</option>
+                                <option value="4">技术部</option>
+                            </select>
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessType">业务类型：</label>
+                        <input type="text" id="businessType" name="businessType" value="" placeholder="请选择业务类型">
+                        <i class="bi bi-search search-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectName">项目名称：</label>
+                        <input type="text" id="projectName" name="projectName" value="" placeholder="请输入项目名称">
+                        <i class="bi bi-search search-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1; min-width: 250px;">
+                        <label for="requisitionType">申请类型：</label>
+                        <div class="select-container">
+                            <select id="requisitionType" name="requisitionType">
+                                <option value="">请选择申请类型</option>
+                                <option value="1" selected>物料申请</option>
+                                <option value="2">服务申请</option>
+                                <option value="3">设备申请</option>
+                            </select>
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="form-group file-upload-container">
+                        <label>文件上传：</label>
+                        <div class="upload-buttons-horizontal">
+                            <button type="button" class="btn btn-upload"><i class="bi bi-upload"></i> 选择文件</button>
+                            <button type="button" class="btn btn-primary"><i class="bi bi-cloud-arrow-up"></i> 开始上传</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group remark-container-top">
+                        <label for="remark">备注：</label>
+                        <textarea id="remark" name="remark" placeholder="请输入备注信息" rows="3"></textarea>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="table-container">
+                <h3>内容：</h3>
+                <div class="table-responsive">
+                    <table id="requisitionItems">
+                        <thead>
+                            <tr>
+                                <th width="40"><input type="checkbox" id="selectAll"></th>
+                                <th width="60">序号</th>
+                                <th>物品名称</th>
+                                <th>单位</th>
+                                <th>计划数量</th>
+                                <th>实际数量</th>
+                                <th>用途</th>
+                                <th>规格</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 表格行将通过JavaScript动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="table-actions">
+                    <div class="table-buttons">
+                        <button class="btn btn-primary" id="addRowBtn"><i class="bi bi-plus-circle"></i> 添加行</button>
+                        <button class="btn btn-danger" id="deleteRowBtn"><i class="bi bi-trash"></i> 删除选中</button>
+                    </div>
+                    <div class="pagination">
+                        <button class="btn-page"><i class="bi bi-chevron-left"></i></button>
+                        <span class="page-info">第 <span id="currentPage">1</span> 页，共 <span id="totalPages">1</span> 页</span>
+                        <button class="btn-page"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="approval-flow-container">
+                <h3>审批流程：</h3>
+                <div class="approval-flow">
+                    <div class="approval-step completed">
+                        <div class="approval-avatar">张</div>
+                        <div class="approval-info">
+                            <div class="approval-name">张经理</div>
+                            <div class="approval-role">提交人</div>
+                            <div class="approval-time">2023-02-27 09:30</div>
+                            <div class="approval-status">已提交</div>
+                        </div>
+                    </div>
+                    <div class="approval-step completed">
+                        <div class="approval-avatar">李</div>
+                        <div class="approval-info">
+                            <div class="approval-name">李部长</div>
+                            <div class="approval-role">一级审批</div>
+                            <div class="approval-time">2023-02-27 10:15</div>
+                            <div class="approval-status">已通过</div>
+                        </div>
+                    </div>
+                    <div class="approval-step completed">
+                        <div class="approval-avatar">王</div>
+                        <div class="approval-info">
+                            <div class="approval-name">王总监</div>
+                            <div class="approval-role">二级审批</div>
+                            <div class="approval-time">2023-02-27 11:30</div>
+                            <div class="approval-status">已通过</div>
+                        </div>
+                    </div>
+                    <div class="approval-step in-progress">
+                        <div class="approval-avatar">赵</div>
+                        <div class="approval-info">
+                            <div class="approval-name">赵副总</div>
+                            <div class="approval-role">三级审批</div>
+                            <div class="approval-time">-</div>
+                            <div class="approval-status">审批中</div>
+                        </div>
+                    </div>
+                    <div class="approval-step">
+                        <div class="approval-avatar">钱</div>
+                        <div class="approval-info">
+                            <div class="approval-name">钱总经理</div>
+                            <div class="approval-role">四级审批</div>
+                            <div class="approval-time">-</div>
+                            <div class="approval-status">待审批</div>
+                        </div>
+                    </div>
+                    <div class="approval-step">
+                        <div class="approval-avatar">孙</div>
+                        <div class="approval-info">
+                            <div class="approval-name">孙董事长</div>
+                            <div class="approval-role">五级审批</div>
+                            <div class="approval-time">-</div>
+                            <div class="approval-status">待审批</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./js/script.js"></script>
+</body>
+</html>
