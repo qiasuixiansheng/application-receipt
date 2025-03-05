@@ -103,16 +103,23 @@ function generateRequisitionNumber() {
 // 初始化表格数据
 function initTableData() {
     // 设置总页数
-    document.getElementById('totalPages').textContent = '3';
+    const totalPages = Math.ceil(allTableData.length / 10);
+    document.getElementById('totalPages').textContent = totalPages || 1;
     
     // 加载第一页数据
     loadTableData(1);
 }
 
 // 加载表格数据
+// 全局数据存储
+let allTableData = generateMockData(1).concat(generateMockData(2), generateMockData(3));
+
 function loadTableData(page) {
-    // 模拟从服务器获取数据
-    const data = generateMockData(page);
+    const itemsPerPage = 10;
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    
+    const data = allTableData.slice(startIndex, endIndex);
     
     const tbody = document.querySelector('#requisitionItems tbody');
     tbody.innerHTML = '';
